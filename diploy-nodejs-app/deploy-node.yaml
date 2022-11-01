@@ -1,0 +1,25 @@
+---
+- name: Install node and npm
+  hosts: 104.248.45.92
+  tasks:
+    - name: Update apt repo and cache
+      ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    - name: Install nodejs and npm
+      ansible.builtin.apt: 
+        pkg:
+          - nodejs
+          - npm
+
+- name: deploy nodejs app
+  hosts: 104.248.45.92
+  tasks:
+    - name: Copy nodejs folder to the server
+      ansible.builtin.copy:
+        src: /home/hotia/devops/projects/simple-nodejs-app/nodejs-app-1.0.0.tgz
+        dest: /root/
+    - name: unpack the node file
+      ansible.builtin.unarchive:
+        src: /root/nodejs-app-1.0.0.tgz
+        dest: /root/
+        remote_src: yes
+  
