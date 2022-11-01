@@ -13,13 +13,23 @@
 - name: deploy nodejs app
   hosts: 104.248.45.92
   tasks:
-    - name: Copy nodejs folder to the server
-      ansible.builtin.copy:
-        src: /home/hotia/devops/projects/simple-nodejs-app/nodejs-app-1.0.0.tgz
-        dest: /root/
     - name: unpack the node file
       ansible.builtin.unarchive:
-        src: /root/nodejs-app-1.0.0.tgz
-        dest: /root/
-        remote_src: yes
+        src: /home/hotia/devops/projects/simple-nodejs-app/nodejs-app-1.0.0.tgz
+        dest: /root
+    - name: Install dependencies
+      community.general.npm:
+        path: /package
+    - name: Start the application
+      ansible.builtin.command: 
+        chdir: /package/app
+        cmd: node server
+      async: 1000
+      poll: 0  
+    - name: Ensure app is running
+      ansible.builtin.shell: ps aux | grep node
+      register: app_status
+    - ansible.builtin.debug: msg={{app_status.stdout_lines}}
+
+
   
