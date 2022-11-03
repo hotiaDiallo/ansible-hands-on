@@ -1,6 +1,16 @@
----
+# Deploy nexus on a digital ocean droplet
+
+Run the playbook
+
+    ansible-playbook -i hosts deploy-nexus.yaml
+
+### Steps 
+
+- Install java and net-tools
+
+```
 - name: Install java and net-tools
-  hosts: nexus_server
+  hosts: 46.101.240.240
   tasks:
     - name: Update atp repo and cache
       ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
@@ -8,9 +18,13 @@
       ansible.builtin.apt: name=openjdk-8-jre-headless
     - name: Install net-tools
       ansible.builtin.apt: name=net-tools
+```
 
+- Download and unpack Nexus installer
+
+```
 - name: Download and unpack Nexus installer
-  hosts: nexus_server
+  hosts: 46.101.240.240
   tasks: 
     - name: Check nexus folder stats
       ansible.builtin.stat:
@@ -27,16 +41,13 @@
         dest: /opt/ 
         remote_src: yes   
       when: not stat_result.stat.exists    
-    - name: Find nexus folder
-      ansible.builtin.find: 
-        paths: /opt
-        pattern: "nexus-*"
-        file_type: directory
-      register: find_result
-    - name: Rename nexus folder
-      ansible.builtin.shell: mv {{find_result.files[0].path}} /opt/nexus
-      when: not stat_result.stat.exists
+```
 
+![Image](../images/nexus-install.png)
+
+- Create nexus user to own nexus folders
+
+```
 - name: Create nexus user to own nexus folders
   hosts: nexus_server
   tasks:
@@ -62,7 +73,13 @@
         owner: nexus
         group: nexus
         recurse: yes
+```
 
+![Image](../images/change-nexus-owner.png)
+
+- Start nexus with nexus user
+
+```
 - name: Start nexus with nexus user
   hosts: nexus_server
   become: True
@@ -75,7 +92,10 @@
         line: run_as_user="nexus"
     - name: Start nexus
       ansible.builtin.command: /opt/nexus/bin/nexus start
+```
+- Verify nexus running
 
+```
 - name: Verify nexus running
   hosts: nexus_server
   tasks:
@@ -90,5 +110,9 @@
       ansible.builtin.shell: netstat -plnt
       register: app_status
     - ansible.builtin.debug: msg={{app_status.stdout_lines}}
+```
 
+![Image](../images/chek-nexus-running.png)
+
+![Image](../images/nuxus-running.png)
 
