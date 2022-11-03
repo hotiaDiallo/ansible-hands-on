@@ -1,0 +1,5 @@
+host: 167.172.105.209
+version: 1.0.0 
+location: /home/hotia/devops/projects/simple-nodejs-app 
+linux_name: hotia
+user_home_dir: /home/{{linux_name}}

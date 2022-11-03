@@ -1,6 +1,8 @@
 ---
 - name: Install node and npm
-  hosts: 167.172.105.209
+  vars_files:
+    - deploy-vars
+  hosts: "{{host}}"
   tasks:
     - name: Update apt repo and cache
       ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
@@ -11,30 +13,34 @@
           - npm
 
 - name: Create a linux user for deployment 
-  hosts: 167.172.105.209
+  vars_files:
+    - deploy-vars
+  hosts: "{{host}}"
   tasks:
-    - name: Add the user 'node'with a primary group of 'admin'
+    - name: Add the user with a primary group of 'admin'
       ansible.builtin.user:
-        name: node
+        name: "{{linux_name}}"
         comment: Node User
         uid: 1040
         group: admin
 
 - name: deploy nodejs app
-  hosts: 167.172.105.209
+  vars_files:
+    - deploy-vars
+  hosts: "{{host}}"
   become: True
-  become_user: node
+  become_user: "{{linux_name}}"
   tasks:
     - name: unpack the node file
       ansible.builtin.unarchive:
-        src: /home/hotia/devops/projects/simple-nodejs-app/nodejs-app-1.0.0.tgz
-        dest: /home/node
+        src: "{{location}}/nodejs-app-{{version}}.tgz"
+        dest: "{{user_home_dir}}"
     - name: Install dependencies
       community.general.npm:
-        path: /home/node/package
+        path: "{{user_home_dir}}/package"
     - name: Start the application
       ansible.builtin.command: 
-        chdir: /home/node/package/app
+        chdir: "{{user_home_dir}}/package/app"
         cmd: node server
       async: 1000
       poll: 0  
