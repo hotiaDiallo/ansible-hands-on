@@ -1,5 +1,9 @@
 # Deploy nexus on a digital ocean droplet
 
+I deploy often nexus on servers, manually using a [script](https://github.com/hotiaDiallo/ansible-hands-on/blob/main/deploy-nexus/nexus.sh)
+
+So I decided to use Ansible to automate that. 
+
 Run the playbook
 
     ansible-playbook -i hosts deploy-nexus.yaml
