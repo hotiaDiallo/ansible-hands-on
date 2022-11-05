@@ -1,4 +1,4 @@
-![Image](../images/ansible.svg)
+<img width="60" src="../images/ansible.svg"/>
 
 <br>
 
