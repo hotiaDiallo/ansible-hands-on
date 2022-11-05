@@ -1,6 +1,21 @@
 ---
+- name: Wait for ssh connection to ec2
+  hosts: all
+  gather_facts: False
+  tasks: 
+    - name: Ensure ssh port open
+      ansible.builtin.wait_for:
+        port: 22
+        delay: 10
+        timeout: 100
+        search_regex: OpenSSH
+        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+      vars:
+        ansible_connection: local
+        ansible_python_interpreter: /usr/bin/python
+
 - name: Install python3, docker, docker-compose
-  hosts: docker_server
+  hosts: all
   become: yes
   # become_user : root
   gather_facts: False # to fix issue with python3
@@ -31,7 +46,7 @@
           - docker-compose
 
 - name: create linux user and add to docker group
-  hosts: docker_server
+  hosts: all
   become: yes
   vars_files:
     - rundocker-vars
@@ -43,7 +58,7 @@
 
 
 - name: Start docker containers
-  hosts: docker_server
+  hosts: all
   # one way to pass password
   #vars_prompt:
     #- name: docker_password
