@@ -1,7 +1,5 @@
 <img width="60" src="../images/ansible.svg"/>
 
-<br>
-
 # Deploy a node application 
 
 Run the playbook

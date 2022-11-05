@@ -1,7 +1,5 @@
 <img width="60" src="../images/ansible.svg"/>
 
-<br>
-
 # Deploy docker containers via docker compose on EC2 server
 
 ## 1- Provision the EC2 instance 
