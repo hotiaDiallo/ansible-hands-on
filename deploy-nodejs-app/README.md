@@ -1,3 +1,7 @@
+![Image](../images/ansible.svg)
+
+<br>
+
 # Deploy a node application 
 
 Run the playbook
