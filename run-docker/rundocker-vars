@@ -1,6 +1,0 @@
-groups: adm,docker
-docker_compose_file: /home/hotia/devops/projects/docker-demo/docker-compose.yaml
-docker_hub_user: selftaughdevops
-docker_hub_password: 5Nyedoiq8s!
-
-
