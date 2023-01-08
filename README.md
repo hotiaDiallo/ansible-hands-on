@@ -9,3 +9,5 @@
 ## [Deploy a java application on EC2 server using docker compose](https://github.com/hotiaDiallo/ansible-hands-on/tree/main/run-docker)
 
 ## [Automate Kubernetes Deployment: deploy app to EKS](https://github.com/hotiaDiallo/ansible-hands-on/tree/deploy-to-kubernates)
+
+## [Ansible Integration in Jenkins](https://github.com/hotiaDiallo/ansible-with-jenkins)
