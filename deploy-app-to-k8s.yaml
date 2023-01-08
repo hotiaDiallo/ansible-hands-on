@@ -1,0 +1,23 @@
+---
+- name: Deploy app in new namespace
+  hosts: localhost
+  tasks:
+    - name: install pre-requisites
+      ansible.builtin.pip:
+        name:
+          - openshift
+          - pyyaml
+          - kubernetes 
+    - name: Create our k8s namespace
+      kubernetes.core.k8s:
+        name: my-app-ns
+        api_version: v1
+        kind: Namespace
+        state: present
+        kubeconfig: ~/devops/projects/sample-k8s-app/kubeconfig-myapp-cluster
+    - name: Deploy our nginx app 
+      kubernetes.core.k8s:
+        src: ~/devops/projects/sample-k8s-app/nginx.yaml
+        state: present
+        kubeconfig: ~/devops/projects/sample-k8s-app/kubeconfig-myapp-cluster
+        namespace: my-app-ns
